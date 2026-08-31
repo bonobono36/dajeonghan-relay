@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>다정한 말 한마디 릴레이</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F3F5EE;
+    --card: #FFFFFF;
+    --ink: #263129;
+    --ink-soft: #5C6960;
+    --teal: #2F6F62;
+    --teal-deep: #1E4B41;
+    --coral: #E8927C;
+    --coral-deep: #B45A42;
+    --line: #DDE3D6;
+    --danger: #B4463C;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+  }
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    font-size: 13px;
+    color: var(--teal);
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 28px;
+    margin: 0 0 12px;
+    color: var(--ink);
+  }
+  .slogan {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: var(--coral-deep);
+    margin: 0;
+  }
+  .count-bar {
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 20px 0 32px;
+    padding: 10px;
+    border-top: 0.5px solid var(--line);
+    border-bottom: 0.5px solid var(--line);
+  }
+  .count-bar strong {
+    color: var(--teal-deep);
+    font-weight: 700;
+  }
+  form.composer {
+    background: var(--card);
+    border-radius: 14px;
+    border: 0.5px solid var(--line);
+    padding: 20px;
+    margin-bottom: 40px;
+  }
+  .composer label {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .composer input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 16px;
+    color: var(--ink);
+  }
+  .composer textarea {
+    width: 100%;
+    min-height: 84px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    color: var(--ink);
+  }
+  .composer input:focus, .composer textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+  .composer-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+  }
+  .char-count {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .submit-btn {
+    background: var(--teal);
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .submit-btn:hover { background: var(--teal-deep); }
+  .submit-btn:disabled { background: #A9B5AC; cursor: not-allowed; }
+  .error-msg {
+    color: var(--coral-deep);
+    font-size: 13px;
+    margin-top: 8px;
+    display: none;
+  }
+  .feed {
+    position: relative;
+    padding-left: 24px;
+  }
+  .feed::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1px;
+    background: var(--line);
+  }
+  .msg-card {
+    position: relative;
+    background: var(--card);
+    border: 0.5px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .msg-card.is-hidden {
+    background: #F7F1EC;
+    border-color: var(--coral);
+  }
+  .msg-card::before {
+    content: "";
+    position: absolute;
+    left: -24px;
+    top: 20px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--coral);
+  }
+  .msg-text {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: var(--ink);
+    margin: 0 0 10px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg-meta {
+    font-size: 12px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .msg-actions {
+    display: flex;
+    gap: 12px;
+    border-top: 0.5px solid var(--line);
+    padding-top: 8px;
+    margin-top: 4px;
+  }
+  .msg-actions button {
+    background: none;
+    border: none;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+  }
+  .msg-actions button:hover { color: var(--teal-deep); }
+  .msg-actions button.delete-btn:hover { color: var(--danger); }
+  .hidden-tag {
+    font-size: 12px;
+    color: var(--coral-deep);
+    font-weight: 500;
+  }
+  .empty-state, .loading-state {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 14px;
+    padding: 40px 0;
+  }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 40px;
+  }
+  .admin-link {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 12px;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 6px;
+  }
+  .admin-banner {
+    text-align: center;
+    background: #FDEFE9;
+    border: 0.5px solid var(--coral);
+    color: var(--coral-deep);
+    font-size: 13px;
+    padding: 8px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">세계 자살예방의 날 캠페인</div>
+    <h1>다정한 말 한마디 릴레이</h1>
+    <p class="slogan">오늘 건넨 다정함, 잊지 않고 돌려드릴게요</p>
+  </header>
+
+  <div class="admin-banner" id="adminBanner">관리자 모드입니다. 숨김/삭제 처리를 할 수 있어요.</div>
+  <div class="count-bar" id="countBar">메시지를 불러오는 중...</div>
+
+  <form class="composer" id="composerForm">
+    <label for="nameInput">닉네임 (선택)</label>
+    <input type="text" id="nameInput" maxlength="20" placeholder="예: 익명의 새힘인">
+    <label for="msgInput">응원 메시지</label>
+    <textarea id="msgInput" maxlength="200" placeholder="지금 누군가에게, 또는 스스로에게 건네고 싶은 말을 남겨주세요"></textarea>
+    <div class="composer-footer">
+      <span class="char-count" id="charCount">0 / 200</span>
+      <button type="submit" class="submit-btn" id="submitBtn">이어서 남기기</button>
+    </div>
+    <div class="error-msg" id="errorMsg">메시지를 입력해주세요.</div>
+  </form>
+
+  <div class="loading-state" id="loadingState">메시지를 불러오는 중입니다...</div>
+  <div class="feed" id="feed" style="display:none;"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨주세요.</div>
+
+  <footer>
+    <div>이 게시판의 메시지는 모두에게 공개됩니다. 서로를 존중하는 말로 채워주세요.</div>
+    <button class="admin-link" id="adminToggle">관리자 모드</button>
+  </footer>
+</div>
+
+<script>
+const STORAGE_KEY = 'dajeonghan-relay-messages';
+const REPORT_THRESHOLD = 3;
+const ADMIN_PASSCODE = '0910';
+
+const form = document.getElementById('composerForm');
+const nameInput = document.getElementById('nameInput');
+const msgInput = document.getElementById('msgInput');
+const charCount = document.getElementById('charCount');
+const submitBtn = document.getElementById('submitBtn');
+const errorMsg = document.getElementById('errorMsg');
+const feed = document.getElementById('feed');
+const emptyState = document.getElementById('emptyState');
+const loadingState = document.getElementById('loadingState');
+const countBar = document.getElementById('countBar');
+const adminToggle = document.getElementById('adminToggle');
+const adminBanner = document.getElementById('adminBanner');
+
+let adminMode = false;
+let cachedMessages = [];
+
+msgInput.addEventListener('input', () => {
+  charCount.textContent = msgInput.value.length + ' / 200';
+});
+
+function timeAgo(ts) {
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60) return '방금 전';
+  if (diff < 3600) return Math.floor(diff / 60) + '분 전';
+  if (diff < 86400) return Math.floor(diff / 3600) + '시간 전';
+  return Math.floor(diff / 86400) + '일 전';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function makeId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function render(messages) {
+  cachedMessages = messages;
+  loadingState.style.display = 'none';
+  adminBanner.style.display = adminMode ? 'block' : 'none';
+
+  const visible = adminMode ? messages : messages.filter(m => !m.hidden);
+  const activeCount = messages.filter(m => !m.hidden).length;
+
+  if (messages.length === 0) {
+    feed.style.display = 'none';
+    emptyState.style.display = 'block';
+    countBar.innerHTML = '아직 첫 메시지를 기다리고 있어요';
+    return;
+  }
+  if (visible.length === 0) {
+    feed.style.display = 'none';
+    emptyState.style.display = 'block';
+    countBar.innerHTML = '지금까지 <strong>' + activeCount + '명</strong>이 다정함을 이어가고 있어요';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  feed.style.display = 'block';
+  countBar.innerHTML = '지금까지 <strong>' + activeCount + '명</strong>이 다정함을 이어가고 있어요';
+
+  const sorted = [...visible].sort((a, b) => b.ts - a.ts);
+  feed.innerHTML = sorted.map(m => {
+    const hiddenTag = m.hidden ? '<div class="hidden-tag">신고 누적으로 숨김 처리됨</div>' : '';
+    const actions = adminMode
+      ? `<div class="msg-actions">
+           <button class="hide-btn" data-id="${m.id}" data-action="${m.hidden ? 'unhide' : 'hide'}">${m.hidden ? '숨김 해제' : '숨기기'}</button>
+           <button class="delete-btn" data-id="${m.id}" data-action="delete">완전 삭제</button>
+         </div>`
+      : `<div class="msg-actions">
+           <button class="report-btn" data-id="${m.id}" data-action="report">신고</button>
+         </div>`;
+    return `
+      <div class="msg-card${m.hidden ? ' is-hidden' : ''}">
+        ${hiddenTag}
+        <p class="msg-text">${escapeHtml(m.text)}</p>
+        <div class="msg-meta">
+          <span>${escapeHtml(m.name || '익명')}</span>
+          <span>${timeAgo(m.ts)}</span>
+        </div>
+        ${actions}
+      </div>
+    `;
+  }).join('');
+}
+
+async function loadMessages() {
+  try {
+    const result = await window.storage.get(STORAGE_KEY, true);
+    const messages = result ? JSON.parse(result.value) : [];
+    render(messages);
+    return messages;
+  } catch (err) {
+    render([]);
+    return [];
+  }
+}
+
+async function saveMessages(messages) {
+  const result = await window.storage.set(STORAGE_KEY, JSON.stringify(messages), true);
+  if (!result) throw new Error('save failed');
+  render(messages);
+}
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const text = msgInput.value.trim();
+  const name = nameInput.value.trim();
+
+  if (!text) {
+    errorMsg.style.display = 'block';
+    return;
+  }
+  errorMsg.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = '남기는 중...';
+
+  try {
+    const current = await loadMessages();
+    const newMessage = { id: makeId(), text, name, ts: Date.now(), reports: 0, hidden: false };
+    const updated = [...current, newMessage];
+    await saveMessages(updated);
+    msgInput.value = '';
+    nameInput.value = '';
+    charCount.textContent = '0 / 200';
+  } catch (err) {
+    errorMsg.textContent = '저장에 실패했어요: ' + (err && err.message ? err.message : String(err));
+    errorMsg.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '이어서 남기기';
+  }
+});
+
+feed.addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const id = btn.dataset.id;
+  const action = btn.dataset.action;
+  btn.disabled = true;
+
+  try {
+    const current = await loadMessages();
+    let updated;
+    if (action === 'report') {
+      updated = current.map(m => {
+        if (m.id !== id) return m;
+        const reports = (m.reports || 0) + 1;
+        return { ...m, reports, hidden: reports >= REPORT_THRESHOLD ? true : m.hidden };
+      });
+    } else if (action === 'hide') {
+      updated = current.map(m => m.id === id ? { ...m, hidden: true } : m);
+    } else if (action === 'unhide') {
+      updated = current.map(m => m.id === id ? { ...m, hidden: false, reports: 0 } : m);
+    } else if (action === 'delete') {
+      const ok = confirm('이 메시지를 완전히 삭제할까요? 되돌릴 수 없습니다.');
+      if (!ok) { btn.disabled = false; return; }
+      updated = current.filter(m => m.id !== id);
+    } else {
+      updated = current;
+    }
+    await saveMessages(updated);
+  } catch (err) {
+    alert('처리에 실패했어요. 다시 시도해주세요.');
+  }
+});
+
+adminToggle.addEventListener('click', () => {
+  if (adminMode) {
+    adminMode = false;
+    adminToggle.textContent = '관리자 모드';
+    render(cachedMessages);
+    return;
+  }
+  const input = prompt('관리자 비밀번호를 입력하세요');
+  if (input === ADMIN_PASSCODE) {
+    adminMode = true;
+    adminToggle.textContent = '관리자 모드 종료';
+    render(cachedMessages);
+  } else if (input !== null) {
+    alert('비밀번호가 올바르지 않습니다.');
+  }
+});
+
+loadMessages();
+</script>
+</body>
+</html>
