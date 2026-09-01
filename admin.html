@@ -14,30 +14,26 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
-  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+  .page { max-width: 1000px; margin: 0 auto; padding: 40px 24px 80px; }
   h1 { font-family: 'Noto Serif KR', serif; font-size: 22px; margin: 0 0 24px; }
   .login-box { background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 20px; max-width: 360px; margin: 40px auto; }
   .login-box label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
   .login-box input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; font-family: inherit; margin-bottom: 14px; }
   .login-box button { width: 100%; background: var(--teal); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; }
   .login-error { color: var(--coral-deep); font-size: 13px; margin-top: 8px; display: none; }
-  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
   .top-bar button { background: none; border: none; color: var(--ink-soft); text-decoration: underline; cursor: pointer; font-size: 13px; font-family: inherit; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-  .tabs button { background: var(--card); border: 0.5px solid var(--line); padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--ink-soft); }
-  .tabs button.active { background: var(--teal); color: #fff; border-color: var(--teal); }
-  .panel { display: none; }
-  .panel.active { display: block; }
+  .export-btn { background: var(--coral); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-bottom: 14px; font-family: inherit; }
+  .export-btn:hover { background: var(--coral-deep); }
   table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; font-size: 13px; }
-  th, td { text-align: left; padding: 10px 12px; border-bottom: 0.5px solid var(--line); }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 0.5px solid var(--line); vertical-align: top; }
   th { background: #F0EDE6; color: var(--ink-soft); font-weight: 500; }
   tr.is-hidden { background: #FBF1EC; }
+  .msg-cell { max-width: 260px; white-space: pre-wrap; word-break: break-word; }
   .actions-cell button { background: none; border: none; font-size: 12px; color: var(--ink-soft); cursor: pointer; margin-right: 10px; font-family: inherit; }
   .actions-cell button:hover { color: var(--teal-deep); }
   .actions-cell button.delete-btn:hover { color: var(--danger); }
-  .export-btn { background: var(--coral); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-bottom: 14px; font-family: inherit; }
-  .export-btn:hover { background: var(--coral-deep); }
-  .empty-note { color: var(--ink-soft); font-size: 14px; padding: 20px; text-align: center; }
+  .empty-note { color: var(--ink-soft); font-size: 14px; padding: 40px; text-align: center; }
 </style>
 </head>
 <body>
@@ -59,27 +55,12 @@
       <button id="logoutBtn">로그아웃</button>
     </div>
 
-    <div class="tabs">
-      <button class="active" data-panel="msgPanel">메시지 관리</button>
-      <button data-panel="participantsPanel">참여자 명단</button>
-    </div>
-
-    <div class="panel active" id="msgPanel">
-      <table id="msgTable">
-        <thead><tr><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
-        <tbody id="msgBody"></tbody>
-      </table>
-      <div class="empty-note" id="msgEmpty" style="display:none;">메시지가 없습니다.</div>
-    </div>
-
-    <div class="panel" id="participantsPanel">
-      <button class="export-btn" id="exportBtn">엑셀로 다운로드</button>
-      <table>
-        <thead><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>시간</th></tr></thead>
-        <tbody id="participantsBody"></tbody>
-      </table>
-      <div class="empty-note" id="pEmpty" style="display:none;">참여자가 없습니다.</div>
-    </div>
+    <button class="export-btn" id="exportBtn">엑셀로 다운로드</button>
+    <table>
+      <thead><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
+      <tbody id="rowsBody"></tbody>
+    </table>
+    <div class="empty-note" id="emptyNote" style="display:none;">아직 참여자가 없습니다.</div>
   </div>
 </div>
 
@@ -110,13 +91,13 @@ const loginError = document.getElementById('loginError');
 const adminArea = document.getElementById('adminArea');
 const whoami = document.getElementById('whoami');
 const logoutBtn = document.getElementById('logoutBtn');
-const msgBody = document.getElementById('msgBody');
-const msgEmpty = document.getElementById('msgEmpty');
-const participantsBody = document.getElementById('participantsBody');
-const pEmpty = document.getElementById('pEmpty');
+const rowsBody = document.getElementById('rowsBody');
+const emptyNote = document.getElementById('emptyNote');
 const exportBtn = document.getElementById('exportBtn');
 
-let latestParticipants = [];
+let participantsMap = {};
+let messagesMap = {};
+let latestRows = [];
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -126,15 +107,6 @@ function escapeHtml(str) {
 function fmtTime(ts) {
   return new Date(ts).toLocaleString('ko-KR');
 }
-
-document.querySelectorAll('.tabs button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.panel).classList.add('active');
-  });
-});
 
 loginBtn.addEventListener('click', async () => {
   loginError.style.display = 'none';
@@ -152,33 +124,64 @@ auth.onAuthStateChanged((user) => {
     loginBox.style.display = 'none';
     adminArea.style.display = 'block';
     whoami.textContent = user.email + ' 로 로그인됨';
-    subscribeMessages();
-    subscribeParticipants();
+    messagesRef.onSnapshot((snap) => {
+      messagesMap = {};
+      snap.docs.forEach(d => { messagesMap[d.id] = d.data(); });
+      render();
+    });
+    participantsRef.onSnapshot((snap) => {
+      participantsMap = {};
+      snap.docs.forEach(d => { participantsMap[d.id] = d.data(); });
+      render();
+    });
   } else {
     loginBox.style.display = 'block';
     adminArea.style.display = 'none';
   }
 });
 
-function subscribeMessages() {
-  messagesRef.orderBy('ts', 'desc').onSnapshot((snap) => {
-    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (docs.length === 0) { msgEmpty.style.display = 'block'; msgBody.innerHTML = ''; return; }
-    msgEmpty.style.display = 'none';
-    msgBody.innerHTML = docs.map(m => `
-      <tr class="${m.hidden ? 'is-hidden' : ''}">
-        <td>${escapeHtml(m.text)}</td>
-        <td>${m.reports || 0}</td>
-        <td>${fmtTime(m.ts)}</td>
-        <td class="actions-cell">
-          <button data-id="${m.id}" data-action="${m.hidden ? 'unhide' : 'hide'}">${m.hidden ? '숨김해제' : '숨기기'}</button>
-          <button class="delete-btn" data-id="${m.id}" data-action="delete" ${m.hidden ? '' : 'disabled title="먼저 숨긴 뒤 삭제 가능"'}>삭제</button>
-        </td>
-      </tr>`).join('');
-  });
+function render() {
+  const ids = Object.keys(participantsMap);
+  const rows = ids.map(id => {
+    const p = participantsMap[id];
+    const m = messagesMap[id] || {};
+    return {
+      id,
+      studentId: p.studentId,
+      studentName: p.studentName,
+      department: p.department,
+      text: p.text,
+      ts: p.ts,
+      reports: m.reports || 0,
+      hidden: !!m.hidden
+    };
+  }).sort((a, b) => b.ts - a.ts);
+
+  latestRows = rows;
+
+  if (rows.length === 0) {
+    rowsBody.innerHTML = '';
+    emptyNote.style.display = 'block';
+    return;
+  }
+  emptyNote.style.display = 'none';
+
+  rowsBody.innerHTML = rows.map(r => `
+    <tr class="${r.hidden ? 'is-hidden' : ''}">
+      <td>${escapeHtml(r.studentId)}</td>
+      <td>${escapeHtml(r.studentName)}</td>
+      <td>${escapeHtml(r.department)}</td>
+      <td class="msg-cell">${escapeHtml(r.text)}</td>
+      <td>${r.reports}</td>
+      <td>${fmtTime(r.ts)}</td>
+      <td class="actions-cell">
+        <button data-id="${r.id}" data-action="${r.hidden ? 'unhide' : 'hide'}">${r.hidden ? '숨김해제' : '숨기기'}</button>
+        <button class="delete-btn" data-id="${r.id}" data-action="delete" ${r.hidden ? '' : 'disabled title="먼저 숨긴 뒤 삭제 가능"'}>삭제</button>
+      </td>
+    </tr>`).join('');
 }
 
-msgBody.addEventListener('click', async (e) => {
+rowsBody.addEventListener('click', async (e) => {
   const btn = e.target.closest('button[data-action]');
   if (!btn || btn.disabled) return;
   const id = btn.dataset.id;
@@ -187,39 +190,27 @@ msgBody.addEventListener('click', async (e) => {
     if (action === 'hide') await messagesRef.doc(id).update({ hidden: true });
     else if (action === 'unhide') await messagesRef.doc(id).update({ hidden: false, reports: 0 });
     else if (action === 'delete') {
-      if (!confirm('완전히 삭제할까요? 되돌릴 수 없습니다.')) return;
-      await messagesRef.doc(id).delete();
+      if (!confirm('완전히 삭제할까요? 참여자 정보와 메시지가 모두 삭제되며 되돌릴 수 없습니다.')) return;
+      const batch = db.batch();
+      batch.delete(messagesRef.doc(id));
+      batch.delete(participantsRef.doc(id));
+      await batch.commit();
     }
   } catch (err) {
     alert('처리 실패: ' + err.message);
   }
 });
 
-function subscribeParticipants() {
-  participantsRef.onSnapshot((snap) => {
-    const docs = snap.docs.map(d => d.data()).sort((a, b) => b.ts - a.ts);
-    latestParticipants = docs;
-    if (docs.length === 0) { pEmpty.style.display = 'block'; participantsBody.innerHTML = ''; return; }
-    pEmpty.style.display = 'none';
-    participantsBody.innerHTML = docs.map(p => `
-      <tr>
-        <td>${escapeHtml(p.studentId)}</td>
-        <td>${escapeHtml(p.studentName)}</td>
-        <td>${escapeHtml(p.department)}</td>
-        <td>${escapeHtml(p.text)}</td>
-        <td>${fmtTime(p.ts)}</td>
-      </tr>`).join('');
-  });
-}
-
 exportBtn.addEventListener('click', () => {
-  if (latestParticipants.length === 0) { alert('내보낼 데이터가 없습니다.'); return; }
-  const rows = latestParticipants.map(p => ({
-    '학번': p.studentId,
-    '이름': p.studentName,
-    '학과': p.department,
-    '메시지': p.text,
-    '등록시간': fmtTime(p.ts)
+  if (latestRows.length === 0) { alert('내보낼 데이터가 없습니다.'); return; }
+  const rows = latestRows.map(r => ({
+    '학번': r.studentId,
+    '이름': r.studentName,
+    '학과': r.department,
+    '메시지': r.text,
+    '신고수': r.reports,
+    '숨김여부': r.hidden ? 'Y' : 'N',
+    '등록시간': fmtTime(r.ts)
   }));
   const ws = XLSX.utils.json_to_sheet(rows);
   const wb = XLSX.utils.book_new();
