@@ -66,7 +66,7 @@
 
     <div class="panel active" id="msgPanel">
       <table id="msgTable">
-        <thead><tr><th>메시지</th><th>닉네임</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
+        <thead><tr><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
         <tbody id="msgBody"></tbody>
       </table>
       <div class="empty-note" id="msgEmpty" style="display:none;">메시지가 없습니다.</div>
@@ -75,7 +75,7 @@
     <div class="panel" id="participantsPanel">
       <button class="export-btn" id="exportBtn">엑셀로 다운로드</button>
       <table>
-        <thead><tr><th>학번</th><th>이름</th><th>메시지</th><th>시간</th></tr></thead>
+        <thead><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>시간</th></tr></thead>
         <tbody id="participantsBody"></tbody>
       </table>
       <div class="empty-note" id="pEmpty" style="display:none;">참여자가 없습니다.</div>
@@ -168,7 +168,6 @@ function subscribeMessages() {
     msgBody.innerHTML = docs.map(m => `
       <tr class="${m.hidden ? 'is-hidden' : ''}">
         <td>${escapeHtml(m.text)}</td>
-        <td>${escapeHtml(m.name)}</td>
         <td>${m.reports || 0}</td>
         <td>${fmtTime(m.ts)}</td>
         <td class="actions-cell">
@@ -206,6 +205,7 @@ function subscribeParticipants() {
       <tr>
         <td>${escapeHtml(p.studentId)}</td>
         <td>${escapeHtml(p.studentName)}</td>
+        <td>${escapeHtml(p.department)}</td>
         <td>${escapeHtml(p.text)}</td>
         <td>${fmtTime(p.ts)}</td>
       </tr>`).join('');
@@ -217,6 +217,7 @@ exportBtn.addEventListener('click', () => {
   const rows = latestParticipants.map(p => ({
     '학번': p.studentId,
     '이름': p.studentName,
+    '학과': p.department,
     '메시지': p.text,
     '등록시간': fmtTime(p.ts)
   }));
