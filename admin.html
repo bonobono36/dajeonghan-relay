@@ -53,6 +53,7 @@
     <div class="top-bar">
       <span id="whoami"></span>
       <div>
+        <button id="resetAllBtn" style="color:#B4463C;">전체 데이터 초기화</button>
         <button id="trashToggle">휴지통 보기</button>
         <button id="logoutBtn">로그아웃</button>
       </div>
@@ -98,6 +99,7 @@ const rowsBody = document.getElementById('rowsBody');
 const emptyNote = document.getElementById('emptyNote');
 const exportBtn = document.getElementById('exportBtn');
 const trashToggle = document.getElementById('trashToggle');
+const resetAllBtn = document.getElementById('resetAllBtn');
 
 let participantsMap = {};
 let messagesMap = {};
@@ -142,6 +144,33 @@ auth.onAuthStateChanged((user) => {
   } else {
     loginBox.style.display = 'block';
     adminArea.style.display = 'none';
+  }
+});
+
+resetAllBtn.addEventListener('click', async () => {
+  const first = confirm('정말로 모든 메시지와 참여자 데이터를 삭제할까요? 되돌릴 수 없습니다.');
+  if (!first) return;
+  const typed = prompt('최종 확인입니다. 계속하려면 아래 칸에 "초기화"라고 입력해주세요.');
+  if (typed !== '초기화') {
+    if (typed !== null) alert('입력한 문구가 일치하지 않아 취소되었습니다.');
+    return;
+  }
+  resetAllBtn.disabled = true;
+  resetAllBtn.textContent = '초기화 중...';
+  try {
+    const [msgSnap, partSnap] = await Promise.all([messagesRef.get(), participantsRef.get()]);
+    const allRefs = [...msgSnap.docs.map(d => d.ref), ...partSnap.docs.map(d => d.ref)];
+    for (let i = 0; i < allRefs.length; i += 400) {
+      const batch = db.batch();
+      allRefs.slice(i, i + 400).forEach(ref => batch.delete(ref));
+      await batch.commit();
+    }
+    alert('모든 데이터가 초기화되었습니다. (' + allRefs.length + '건 삭제됨)');
+  } catch (err) {
+    alert('초기화 실패: ' + err.message);
+  } finally {
+    resetAllBtn.disabled = false;
+    resetAllBtn.textContent = '전체 데이터 초기화';
   }
 });
 
