@@ -8,250 +8,66 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F3F5EE;
-    --card: #FFFFFF;
-    --ink: #263129;
-    --ink-soft: #5C6960;
-    --teal: #2F6F62;
-    --teal-deep: #1E4B41;
-    --coral: #E8927C;
-    --coral-deep: #B45A42;
-    --line: #DDE3D6;
-    --danger: #B4463C;
+    --bg: #F3F5EE; --card: #FFFFFF; --ink: #263129; --ink-soft: #5C6960;
+    --teal: #2F6F62; --teal-deep: #1E4B41; --coral: #E8927C; --coral-deep: #B45A42;
+    --line: #DDE3D6; --danger: #B4463C;
   }
   * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Noto Sans KR', sans-serif;
-    line-height: 1.6;
-  }
-  .page {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 48px 24px 80px;
-  }
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .eyebrow {
-    font-size: 13px;
-    color: var(--teal);
-    letter-spacing: 0.02em;
-    margin-bottom: 8px;
-  }
-  h1 {
-    font-family: 'Noto Serif KR', serif;
-    font-weight: 600;
-    font-size: 28px;
-    margin: 0 0 12px;
-    color: var(--ink);
-  }
-  .slogan {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 16px;
-    color: var(--coral-deep);
-    margin: 0;
-  }
-  .count-bar {
-    text-align: center;
-    font-size: 14px;
-    color: var(--ink-soft);
-    margin: 20px 0 32px;
-    padding: 10px;
-    border-top: 0.5px solid var(--line);
-    border-bottom: 0.5px solid var(--line);
-  }
-  .count-bar strong {
-    color: var(--teal-deep);
-    font-weight: 700;
-  }
-  form.composer {
-    background: var(--card);
-    border-radius: 14px;
-    border: 0.5px solid var(--line);
-    padding: 20px;
-    margin-bottom: 40px;
-  }
-  .composer label {
-    display: block;
-    font-size: 13px;
-    color: var(--ink-soft);
-    margin-bottom: 6px;
-  }
-  .composer input[type="text"] {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    font-size: 14px;
-    font-family: inherit;
-    margin-bottom: 16px;
-    color: var(--ink);
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
+  .page { max-width: 640px; margin: 0 auto; padding: 48px 24px 80px; }
+  header { text-align: center; margin-bottom: 40px; }
+  .eyebrow { font-size: 13px; color: var(--teal); letter-spacing: 0.02em; margin-bottom: 8px; }
+  h1 { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 28px; margin: 0 0 12px; }
+  .slogan { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--coral-deep); margin: 0; }
+  .count-bar { text-align: center; font-size: 14px; color: var(--ink-soft); margin: 20px 0 32px; padding: 10px; border-top: 0.5px solid var(--line); border-bottom: 0.5px solid var(--line); }
+  .count-bar strong { color: var(--teal-deep); font-weight: 700; }
+  form.composer { background: var(--card); border-radius: 14px; border: 0.5px solid var(--line); padding: 20px; margin-bottom: 40px; }
+  .composer label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
+  .field-row { display: flex; gap: 12px; margin-bottom: 16px; }
+  .field-row > div { flex: 1; }
+  .composer input[type="text"], .composer input[type="email"], .composer input[type="password"] {
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 14px; font-family: inherit; color: var(--ink);
   }
   .composer textarea {
-    width: 100%;
-    min-height: 84px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    font-size: 15px;
-    font-family: inherit;
-    resize: vertical;
-    color: var(--ink);
+    width: 100%; min-height: 84px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 15px; font-family: inherit; resize: vertical; color: var(--ink);
   }
-  .composer input:focus, .composer textarea:focus {
-    outline: none;
-    border-color: var(--teal);
-  }
-  .composer-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 14px;
-  }
-  .char-count {
-    font-size: 12px;
-    color: var(--ink-soft);
-  }
-  .submit-btn {
-    background: var(--teal);
-    color: #fff;
-    border: none;
-    padding: 10px 22px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: inherit;
-    cursor: pointer;
-  }
+  .composer input:focus, .composer textarea:focus { outline: none; border-color: var(--teal); }
+  .privacy-note { font-size: 12px; color: var(--ink-soft); margin: -8px 0 16px; }
+  .composer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+  .char-count { font-size: 12px; color: var(--ink-soft); }
+  .submit-btn { background: var(--teal); color: #fff; border: none; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; }
   .submit-btn:hover { background: var(--teal-deep); }
   .submit-btn:disabled { background: #A9B5AC; cursor: not-allowed; }
-  .error-msg {
-    color: var(--coral-deep);
-    font-size: 13px;
-    margin-top: 8px;
-    display: none;
-  }
-  .feed {
-    position: relative;
-    padding-left: 24px;
-  }
-  .feed::before {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 6px;
-    bottom: 6px;
-    width: 1px;
-    background: var(--line);
-  }
-  .msg-card {
-    position: relative;
-    background: var(--card);
-    border: 0.5px solid var(--line);
-    border-radius: 12px;
-    padding: 16px 18px;
-    margin-bottom: 16px;
-  }
-  .msg-card.is-hidden {
-    background: #F7F1EC;
-    border-color: var(--coral);
-  }
-  .msg-card::before {
-    content: "";
-    position: absolute;
-    left: -24px;
-    top: 20px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--coral);
-  }
-  .msg-text {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 16px;
-    color: var(--ink);
-    margin: 0 0 10px;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .msg-meta {
-    font-size: 12px;
-    color: var(--ink-soft);
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .msg-actions {
-    display: flex;
-    gap: 12px;
-    border-top: 0.5px solid var(--line);
-    padding-top: 8px;
-    margin-top: 4px;
-  }
-  .msg-actions button {
-    background: none;
-    border: none;
-    font-size: 12px;
-    color: var(--ink-soft);
-    cursor: pointer;
-    padding: 0;
-    font-family: inherit;
-  }
+  .error-msg { color: var(--coral-deep); font-size: 13px; margin-top: 8px; display: none; }
+  .feed { position: relative; padding-left: 24px; }
+  .feed::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+  .msg-card { position: relative; background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+  .msg-card.is-hidden { background: #F7F1EC; border-color: var(--coral); }
+  .msg-card::before { content: ""; position: absolute; left: -24px; top: 20px; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
+  .msg-text { font-family: 'Noto Serif KR', serif; font-size: 16px; margin: 0 0 10px; white-space: pre-wrap; word-break: break-word; }
+  .msg-meta { font-size: 12px; color: var(--ink-soft); display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .msg-actions { display: flex; gap: 12px; border-top: 0.5px solid var(--line); padding-top: 8px; margin-top: 4px; }
+  .msg-actions button { background: none; border: none; font-size: 12px; color: var(--ink-soft); cursor: pointer; padding: 0; font-family: inherit; }
   .msg-actions button:hover { color: var(--teal-deep); }
   .msg-actions button.delete-btn:hover { color: var(--danger); }
-  .hidden-tag {
-    font-size: 12px;
-    color: var(--coral-deep);
-    font-weight: 500;
-  }
-  .empty-state, .loading-state {
-    text-align: center;
-    color: var(--ink-soft);
-    font-size: 14px;
-    padding: 40px 0;
-  }
-  footer {
-    text-align: center;
-    font-size: 12px;
-    color: var(--ink-soft);
-    margin-top: 40px;
-  }
-  .admin-link {
-    background: none;
-    border: none;
-    color: var(--ink-soft);
-    font-size: 12px;
-    text-decoration: underline;
-    cursor: pointer;
-    font-family: inherit;
-    margin-top: 6px;
-  }
-  .admin-banner {
-    text-align: center;
-    background: #FDEFE9;
-    border: 0.5px solid var(--coral);
-    color: var(--coral-deep);
-    font-size: 13px;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: none;
-  }
-  .conn-error {
-    text-align: center;
-    background: #FDEFE9;
-    border: 0.5px solid var(--danger);
-    color: var(--danger);
-    font-size: 13px;
-    padding: 8px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: none;
-  }
+  .hidden-tag { font-size: 12px; color: var(--coral-deep); font-weight: 500; }
+  .empty-state, .loading-state { text-align: center; color: var(--ink-soft); font-size: 14px; padding: 40px 0; }
+  footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 40px; }
+  .admin-link { background: none; border: none; color: var(--ink-soft); font-size: 12px; text-decoration: underline; cursor: pointer; font-family: inherit; margin-top: 6px; }
+  .admin-banner { display: none; align-items: center; justify-content: space-between; background: #FDEFE9; border: 0.5px solid var(--coral); color: var(--coral-deep); font-size: 13px; padding: 8px 12px; border-radius: 8px; margin-bottom: 20px; }
+  .admin-banner button { background: none; border: none; color: var(--coral-deep); text-decoration: underline; cursor: pointer; font-size: 12px; font-family: inherit; }
+  .conn-error { text-align: center; background: #FDEFE9; border: 0.5px solid var(--danger); color: var(--danger); font-size: 13px; padding: 8px; border-radius: 8px; margin-bottom: 20px; display: none; }
+  .login-box { background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 16px; margin: 8px 0 20px; display: none; }
+  .login-box .field-row { margin-bottom: 10px; }
+  .login-actions { display: flex; gap: 8px; align-items: center; }
+  .login-actions button { background: var(--teal); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .participants-panel { background: #FBF7F0; border: 0.5px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 24px; }
+  .participants-panel h2 { font-size: 14px; margin: 0 0 12px; color: var(--teal-deep); }
+  .participants-panel table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .participants-panel th, .participants-panel td { text-align: left; padding: 6px 8px; border-bottom: 0.5px solid var(--line); }
+  .participants-panel th { color: var(--ink-soft); font-weight: 500; }
 </style>
 </head>
 <body>
@@ -263,15 +79,37 @@
     <p class="slogan">오늘 건넨 다정함, 잊지 않고 돌려드릴게요</p>
   </header>
 
-  <div class="conn-error" id="connError">메시지 서버에 연결하지 못했어요. 인터넷 연결을 확인해주세요.</div>
-  <div class="admin-banner" id="adminBanner">관리자 모드입니다. 숨김/삭제 처리를 할 수 있어요.</div>
+  <div class="conn-error" id="connError"></div>
+  <div class="admin-banner" id="adminBanner">
+    <span>관리자로 로그인되었습니다.</span>
+    <button id="logoutBtn">로그아웃</button>
+  </div>
   <div class="count-bar" id="countBar">메시지를 불러오는 중...</div>
 
+  <div id="participantsPanel" class="participants-panel" style="display:none;">
+    <h2>참여자 명단 (관리자 전용)</h2>
+    <table>
+      <thead><tr><th>학번</th><th>이름</th><th>메시지</th><th>시간</th></tr></thead>
+      <tbody id="participantsBody"></tbody>
+    </table>
+  </div>
+
   <form class="composer" id="composerForm">
-    <label for="nameInput">닉네임 (선택)</label>
-    <input type="text" id="nameInput" maxlength="20" placeholder="예: 익명의 새힘인">
+    <div class="field-row">
+      <div>
+        <label for="sidInput">학번</label>
+        <input type="text" id="sidInput" maxlength="20" placeholder="예: 20261234">
+      </div>
+      <div>
+        <label for="realNameInput">이름</label>
+        <input type="text" id="realNameInput" maxlength="20" placeholder="실명">
+      </div>
+    </div>
+    <label for="nameInput">게시판에 표시될 닉네임 (선택, 비워두면 '익명')</label>
+    <input type="text" id="nameInput" maxlength="20" placeholder="예: 익명의 새힘인" style="margin-bottom:16px;">
     <label for="msgInput">응원 메시지</label>
     <textarea id="msgInput" maxlength="200" placeholder="지금 누군가에게, 또는 스스로에게 건네고 싶은 말을 남겨주세요"></textarea>
+    <p class="privacy-note">학번과 이름은 공개되지 않으며, 담당 상담센터 관리자만 확인합니다.</p>
     <div class="composer-footer">
       <span class="char-count" id="charCount">0 / 200</span>
       <button type="submit" class="submit-btn" id="submitBtn">이어서 남기기</button>
@@ -283,14 +121,26 @@
   <div class="feed" id="feed" style="display:none;"></div>
   <div class="empty-state" id="emptyState" style="display:none;">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨주세요.</div>
 
+  <div class="login-box" id="loginBox">
+    <div class="field-row">
+      <div><input type="email" id="loginEmail" placeholder="관리자 이메일"></div>
+      <div><input type="password" id="loginPassword" placeholder="비밀번호"></div>
+    </div>
+    <div class="login-actions">
+      <button id="loginBtn">로그인</button>
+      <span class="error-msg" id="loginError" style="margin:0;"></span>
+    </div>
+  </div>
+
   <footer>
-    <div>이 게시판의 메시지는 모두에게 공개됩니다. 서로를 존중하는 말로 채워주세요.</div>
-    <button class="admin-link" id="adminToggle">관리자 모드</button>
+    <div>이 게시판의 응원 메시지는 모두에게 공개됩니다. 학번과 이름은 관리자만 확인해요.</div>
+    <button class="admin-link" id="adminToggle">관리자 로그인</button>
   </footer>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAacDHT3ifs9WvMURNPrP3o0koHKCD9HMo",
@@ -303,11 +153,14 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth();
 const messagesRef = db.collection('messages');
+const participantsRef = db.collection('participants');
 const REPORT_THRESHOLD = 3;
-const ADMIN_PASSCODE = '0910';
 
 const form = document.getElementById('composerForm');
+const sidInput = document.getElementById('sidInput');
+const realNameInput = document.getElementById('realNameInput');
 const nameInput = document.getElementById('nameInput');
 const msgInput = document.getElementById('msgInput');
 const charCount = document.getElementById('charCount');
@@ -319,13 +172,19 @@ const loadingState = document.getElementById('loadingState');
 const countBar = document.getElementById('countBar');
 const adminToggle = document.getElementById('adminToggle');
 const adminBanner = document.getElementById('adminBanner');
+const logoutBtn = document.getElementById('logoutBtn');
 const connError = document.getElementById('connError');
+const loginBox = document.getElementById('loginBox');
+const loginEmail = document.getElementById('loginEmail');
+const loginPassword = document.getElementById('loginPassword');
+const loginBtn = document.getElementById('loginBtn');
+const loginError = document.getElementById('loginError');
+const participantsPanel = document.getElementById('participantsPanel');
+const participantsBody = document.getElementById('participantsBody');
 
 let adminMode = false;
 
-msgInput.addEventListener('input', () => {
-  charCount.textContent = msgInput.value.length + ' / 200';
-});
+msgInput.addEventListener('input', () => { charCount.textContent = msgInput.value.length + ' / 200'; });
 
 function timeAgo(ts) {
   const diff = Math.floor((Date.now() - ts) / 1000);
@@ -334,7 +193,6 @@ function timeAgo(ts) {
   if (diff < 86400) return Math.floor(diff / 3600) + '시간 전';
   return Math.floor(diff / 86400) + '일 전';
 }
-
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
@@ -344,7 +202,6 @@ function escapeHtml(str) {
 function render(docs) {
   loadingState.style.display = 'none';
   connError.style.display = 'none';
-  adminBanner.style.display = adminMode ? 'block' : 'none';
 
   const all = docs.map(d => ({ id: d.id, ...d.data() }));
   const visible = adminMode ? all : all.filter(m => !m.hidden);
@@ -362,7 +219,6 @@ function render(docs) {
     countBar.innerHTML = '지금까지 <strong>' + activeCount + '명</strong>이 다정함을 이어가고 있어요';
     return;
   }
-
   emptyState.style.display = 'none';
   feed.style.display = 'block';
   countBar.innerHTML = '지금까지 <strong>' + activeCount + '명</strong>이 다정함을 이어가고 있어요';
@@ -371,24 +227,29 @@ function render(docs) {
     const hiddenTag = m.hidden ? '<div class="hidden-tag">신고 누적으로 숨김 처리됨</div>' : '';
     const actions = adminMode
       ? `<div class="msg-actions">
-           <button class="hide-btn" data-id="${m.id}" data-action="${m.hidden ? 'unhide' : 'hide'}">${m.hidden ? '숨김 해제' : '숨기기'}</button>
+           <button data-id="${m.id}" data-action="${m.hidden ? 'unhide' : 'hide'}">${m.hidden ? '숨김 해제' : '숨기기'}</button>
            <button class="delete-btn" data-id="${m.id}" data-action="delete" ${m.hidden ? '' : 'disabled title="먼저 숨긴 뒤 삭제할 수 있어요"'}>완전 삭제</button>
          </div>`
-      : `<div class="msg-actions">
-           <button class="report-btn" data-id="${m.id}" data-action="report">신고</button>
-         </div>`;
+      : `<div class="msg-actions"><button data-id="${m.id}" data-action="report">신고</button></div>`;
     return `
       <div class="msg-card${m.hidden ? ' is-hidden' : ''}">
         ${hiddenTag}
         <p class="msg-text">${escapeHtml(m.text)}</p>
-        <div class="msg-meta">
-          <span>${escapeHtml(m.name || '익명')}</span>
-          <span>${timeAgo(m.ts)}</span>
-        </div>
+        <div class="msg-meta"><span>${escapeHtml(m.name || '익명')}</span><span>${timeAgo(m.ts)}</span></div>
         ${actions}
-      </div>
-    `;
+      </div>`;
   }).join('');
+}
+
+function renderParticipants(docs) {
+  const rows = docs.map(d => d.data()).sort((a, b) => b.ts - a.ts);
+  participantsBody.innerHTML = rows.map(p => `
+    <tr>
+      <td>${escapeHtml(p.studentId || '')}</td>
+      <td>${escapeHtml(p.studentName || '')}</td>
+      <td>${escapeHtml(p.text || '')}</td>
+      <td>${timeAgo(p.ts)}</td>
+    </tr>`).join('');
 }
 
 messagesRef.orderBy('ts', 'desc').onSnapshot(
@@ -410,9 +271,16 @@ messagesRef.orderBy('ts', 'desc').onSnapshot(
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+  const studentId = sidInput.value.trim();
+  const studentName = realNameInput.value.trim();
   const text = msgInput.value.trim();
-  const name = nameInput.value.trim();
+  const displayName = nameInput.value.trim();
 
+  if (!studentId || !studentName) {
+    errorMsg.textContent = '학번과 이름을 입력해주세요.';
+    errorMsg.style.display = 'block';
+    return;
+  }
   if (!text) {
     errorMsg.textContent = '메시지를 입력해주세요.';
     errorMsg.style.display = 'block';
@@ -423,9 +291,17 @@ form.addEventListener('submit', async (e) => {
   submitBtn.textContent = '남기는 중...';
 
   try {
-    await messagesRef.add({ text, name, ts: Date.now(), reports: 0, hidden: false });
-    msgInput.value = '';
+    const ts = Date.now();
+    const msgRef = messagesRef.doc();
+    const batch = db.batch();
+    batch.set(msgRef, { text, name: displayName || '익명', ts, reports: 0, hidden: false });
+    batch.set(participantsRef.doc(msgRef.id), { studentId, studentName, text, ts });
+    await batch.commit();
+
+    sidInput.value = '';
+    realNameInput.value = '';
     nameInput.value = '';
+    msgInput.value = '';
     charCount.textContent = '0 / 200';
   } catch (err) {
     errorMsg.textContent = '저장에 실패했어요: ' + err.message;
@@ -442,7 +318,6 @@ feed.addEventListener('click', async (e) => {
   const id = btn.dataset.id;
   const action = btn.dataset.action;
   btn.disabled = true;
-
   try {
     if (action === 'report') {
       await messagesRef.doc(id).update({ reports: firebase.firestore.FieldValue.increment(1) });
@@ -462,19 +337,37 @@ feed.addEventListener('click', async (e) => {
 });
 
 adminToggle.addEventListener('click', () => {
-  if (adminMode) {
-    adminMode = false;
-    adminToggle.textContent = '관리자 모드';
-    messagesRef.orderBy('ts', 'desc').get().then(snap => render(snap.docs));
-    return;
+  loginBox.style.display = loginBox.style.display === 'block' ? 'none' : 'block';
+});
+
+loginBtn.addEventListener('click', async () => {
+  loginError.style.display = 'none';
+  try {
+    await auth.signInWithEmailAndPassword(loginEmail.value.trim(), loginPassword.value);
+    loginBox.style.display = 'none';
+    loginEmail.value = '';
+    loginPassword.value = '';
+  } catch (err) {
+    loginError.textContent = '로그인 실패: ' + err.message;
+    loginError.style.display = 'block';
   }
-  const input = prompt('관리자 비밀번호를 입력하세요');
-  if (input === ADMIN_PASSCODE) {
-    adminMode = true;
-    adminToggle.textContent = '관리자 모드 종료';
-    messagesRef.orderBy('ts', 'desc').get().then(snap => render(snap.docs));
-  } else if (input !== null) {
-    alert('비밀번호가 올바르지 않습니다.');
+});
+
+logoutBtn.addEventListener('click', () => auth.signOut());
+
+auth.onAuthStateChanged((user) => {
+  adminMode = !!user;
+  adminBanner.style.display = adminMode ? 'flex' : 'none';
+  adminToggle.style.display = adminMode ? 'none' : 'inline';
+  participantsPanel.style.display = adminMode ? 'block' : 'none';
+
+  messagesRef.orderBy('ts', 'desc').get().then(snap => render(snap.docs));
+
+  if (adminMode) {
+    participantsRef.onSnapshot(
+      (snap) => renderParticipants(snap.docs),
+      () => {}
+    );
   }
 });
 </script>
