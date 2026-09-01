@@ -52,15 +52,18 @@
   <div id="adminArea" style="display:none;">
     <div class="top-bar">
       <span id="whoami"></span>
-      <button id="logoutBtn">로그아웃</button>
+      <div>
+        <button id="trashToggle">휴지통 보기</button>
+        <button id="logoutBtn">로그아웃</button>
+      </div>
     </div>
 
     <button class="export-btn" id="exportBtn">엑셀로 다운로드</button>
     <table>
-      <thead><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
+      <thead id="tableHead"><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
       <tbody id="rowsBody"></tbody>
     </table>
-    <div class="empty-note" id="emptyNote" style="display:none;">아직 참여자가 없습니다.</div>
+    <div class="empty-note" id="emptyNote" style="display:none;"></div>
   </div>
 </div>
 
@@ -94,10 +97,12 @@ const logoutBtn = document.getElementById('logoutBtn');
 const rowsBody = document.getElementById('rowsBody');
 const emptyNote = document.getElementById('emptyNote');
 const exportBtn = document.getElementById('exportBtn');
+const trashToggle = document.getElementById('trashToggle');
 
 let participantsMap = {};
 let messagesMap = {};
 let latestRows = [];
+let showTrash = false;
 
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -140,9 +145,15 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+trashToggle.addEventListener('click', () => {
+  showTrash = !showTrash;
+  trashToggle.textContent = showTrash ? '전체 명단 보기' : '휴지통 보기';
+  render();
+});
+
 function render() {
   const ids = Object.keys(participantsMap);
-  const rows = ids.map(id => {
+  const all = ids.map(id => {
     const p = participantsMap[id];
     const m = messagesMap[id] || {};
     return {
@@ -153,20 +164,29 @@ function render() {
       text: p.text,
       ts: p.ts,
       reports: m.reports || 0,
-      hidden: !!m.hidden
+      hidden: !!m.hidden,
+      trashed: !!m.trashed
     };
-  }).sort((a, b) => b.ts - a.ts);
+  });
 
+  const rows = all.filter(r => showTrash ? r.trashed : !r.trashed).sort((a, b) => b.ts - a.ts);
   latestRows = rows;
 
   if (rows.length === 0) {
     rowsBody.innerHTML = '';
+    emptyNote.textContent = showTrash ? '휴지통이 비어있습니다.' : '아직 참여자가 없습니다.';
     emptyNote.style.display = 'block';
     return;
   }
   emptyNote.style.display = 'none';
 
-  rowsBody.innerHTML = rows.map(r => `
+  rowsBody.innerHTML = rows.map(r => {
+    const actions = showTrash
+      ? `<button data-id="${r.id}" data-action="restore">복원</button>
+         <button class="delete-btn" data-id="${r.id}" data-action="delete">완전삭제</button>`
+      : `<button data-id="${r.id}" data-action="${r.hidden ? 'unhide' : 'hide'}">${r.hidden ? '숨김해제' : '숨기기'}</button>
+         <button class="delete-btn" data-id="${r.id}" data-action="trash">휴지통으로</button>`;
+    return `
     <tr class="${r.hidden ? 'is-hidden' : ''}">
       <td>${escapeHtml(r.studentId)}</td>
       <td>${escapeHtml(r.studentName)}</td>
@@ -174,11 +194,9 @@ function render() {
       <td class="msg-cell">${escapeHtml(r.text)}</td>
       <td>${r.reports}</td>
       <td>${fmtTime(r.ts)}</td>
-      <td class="actions-cell">
-        <button data-id="${r.id}" data-action="${r.hidden ? 'unhide' : 'hide'}">${r.hidden ? '숨김해제' : '숨기기'}</button>
-        <button class="delete-btn" data-id="${r.id}" data-action="delete" ${r.hidden ? '' : 'disabled title="먼저 숨긴 뒤 삭제 가능"'}>삭제</button>
-      </td>
-    </tr>`).join('');
+      <td class="actions-cell">${actions}</td>
+    </tr>`;
+  }).join('');
 }
 
 rowsBody.addEventListener('click', async (e) => {
@@ -189,7 +207,12 @@ rowsBody.addEventListener('click', async (e) => {
   try {
     if (action === 'hide') await messagesRef.doc(id).update({ hidden: true });
     else if (action === 'unhide') await messagesRef.doc(id).update({ hidden: false, reports: 0 });
-    else if (action === 'delete') {
+    else if (action === 'trash') {
+      if (!confirm('이 메시지를 휴지통으로 이동할까요?')) return;
+      await messagesRef.doc(id).update({ trashed: true, hidden: true });
+    } else if (action === 'restore') {
+      await messagesRef.doc(id).update({ trashed: false });
+    } else if (action === 'delete') {
       if (!confirm('완전히 삭제할까요? 참여자 정보와 메시지가 모두 삭제되며 되돌릴 수 없습니다.')) return;
       const batch = db.batch();
       batch.delete(messagesRef.doc(id));
