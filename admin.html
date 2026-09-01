@@ -3,90 +3,141 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>관리자 페이지 - 다정한 말 한마디 릴레이</title>
+<title>다정한 말 한마디 릴레이</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Serif+KR:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F3F5EE; --card: #FFFFFF; --ink: #263129; --ink-soft: #5C6960;
-    --teal: #2F6F62; --teal-deep: #1E4B41; --coral: #E8927C; --coral-deep: #B45A42;
-    --line: #DDE3D6; --danger: #B4463C;
+    --bg: #FBF3DE; --card: #FFFDF7; --ink: #33422C; --ink-soft: #7A7A63;
+    --teal: #4C8C5A; --teal-deep: #35643F; --coral: #E8834C; --coral-deep: #C25E2C;
+    --line: #E9DEC1; --danger: #C1473A; --leaf: #8FBF7F;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
-  .page { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
-  h1 { font-family: 'Noto Serif KR', serif; font-size: 22px; margin: 0 0 24px; }
-  .login-box { background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 20px; max-width: 360px; margin: 40px auto; }
-  .login-box label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
-  .login-box input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; font-family: inherit; margin-bottom: 14px; }
-  .login-box button { width: 100%; background: var(--teal); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: inherit; }
-  .login-error { color: var(--coral-deep); font-size: 13px; margin-top: 8px; display: none; }
-  .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-  .top-bar button { background: none; border: none; color: var(--ink-soft); text-decoration: underline; cursor: pointer; font-size: 13px; font-family: inherit; }
-  .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-  .tabs button { background: var(--card); border: 0.5px solid var(--line); padding: 8px 16px; border-radius: 20px; font-size: 13px; cursor: pointer; font-family: inherit; color: var(--ink-soft); }
-  .tabs button.active { background: var(--teal); color: #fff; border-color: var(--teal); }
-  .panel { display: none; }
-  .panel.active { display: block; }
-  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 12px; overflow: hidden; font-size: 13px; }
-  th, td { text-align: left; padding: 10px 12px; border-bottom: 0.5px solid var(--line); }
-  th { background: #F0EDE6; color: var(--ink-soft); font-weight: 500; }
-  tr.is-hidden { background: #FBF1EC; }
-  .actions-cell button { background: none; border: none; font-size: 12px; color: var(--ink-soft); cursor: pointer; margin-right: 10px; font-family: inherit; }
-  .actions-cell button:hover { color: var(--teal-deep); }
-  .actions-cell button.delete-btn:hover { color: var(--danger); }
-  .export-btn { background: var(--coral); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; margin-bottom: 14px; font-family: inherit; }
-  .export-btn:hover { background: var(--coral-deep); }
-  .empty-note { color: var(--ink-soft); font-size: 14px; padding: 20px; text-align: center; }
+  body {
+    margin: 0; color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;
+    background: linear-gradient(180deg, #FFF9EA 0%, #FBF3DE 30%, #F6EAC9 100%);
+  }
+  .page { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+  .hero-wrap { margin: 0 -24px 8px; }
+  .hero-banner { width: 100%; display: block; border-radius: 0 0 28px 28px; }
+  header { text-align: center; margin: 20px 0 28px; }
+  .eyebrow { font-size: 13px; color: var(--teal-deep); letter-spacing: 0.02em; margin-bottom: 6px; font-weight: 500; }
+  h1 { font-family: 'Gaegu', 'Noto Serif KR', serif; font-weight: 700; font-size: 30px; margin: 0 0 8px; color: var(--teal-deep); }
+  .slogan { font-family: 'Gaegu', 'Noto Serif KR', serif; font-size: 17px; color: var(--coral-deep); margin: 0; }
+  .conn-error { text-align: center; background: #FDEFE9; border: 0.5px solid var(--danger); color: var(--danger); font-size: 13px; padding: 8px; border-radius: 8px; margin-bottom: 20px; display: none; }
+
+  .layout { display: flex; gap: 24px; align-items: flex-start; }
+  .sidebar { flex: 0 0 300px; position: sticky; top: 24px; }
+  .feed-col { flex: 1; min-width: 0; }
+
+  form.composer { background: var(--card); border-radius: 20px; border: 0.5px solid var(--line); padding: 18px; box-shadow: 0 6px 18px rgba(160, 130, 60, 0.08); }
+  .composer label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; }
+  .composer .field { margin-bottom: 12px; }
+  .composer input[type="text"], .composer select {
+    width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 13px; font-family: inherit; color: var(--ink); background: #fff;
+  }
+  .composer textarea {
+    width: 100%; min-height: 90px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 14px; font-family: inherit; resize: vertical; color: var(--ink);
+  }
+  .composer input:focus, .composer select:focus, .composer textarea:focus { outline: none; border-color: var(--teal); }
+  .privacy-note { font-size: 11px; color: var(--ink-soft); margin: 6px 0 12px; line-height: 1.4; }
+  .composer-footer { display: flex; flex-direction: column; gap: 8px; }
+  .char-count { font-size: 11px; color: var(--ink-soft); text-align: right; }
+  .submit-btn { background: var(--teal); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; width: 100%; }
+  .submit-btn:hover { background: var(--teal-deep); }
+  .submit-btn:disabled { background: #A9B5AC; cursor: not-allowed; }
+  .error-msg { color: var(--coral-deep); font-size: 12px; margin-top: 6px; display: none; }
+
+  .count-bar { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; padding: 10px; border-bottom: 0.5px solid var(--line); }
+  .count-bar strong { color: var(--teal-deep); font-weight: 700; }
+  .feed { position: relative; padding-left: 24px; }
+  .feed::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
+  .msg-card { position: relative; background: var(--card); border: 0.5px solid var(--line); border-radius: 16px; padding: 16px 18px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(160, 130, 60, 0.06); }
+  .msg-card::before { content: ""; position: absolute; left: -24px; top: 20px; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
+  .msg-text { font-family: 'Noto Serif KR', serif; font-size: 16px; margin: 0 0 10px; white-space: pre-wrap; word-break: break-word; }
+  .msg-meta { font-size: 12px; color: var(--ink-soft); display: flex; justify-content: flex-end; margin-bottom: 8px; }
+  .msg-actions { display: flex; gap: 12px; border-top: 0.5px solid var(--line); padding-top: 8px; margin-top: 4px; }
+  .msg-actions button { background: none; border: none; font-size: 12px; color: var(--ink-soft); cursor: pointer; padding: 0; font-family: inherit; }
+  .msg-actions button:hover { color: var(--teal-deep); }
+  .empty-state, .loading-state { text-align: center; color: var(--ink-soft); font-size: 14px; padding: 40px 0; }
+  footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 40px; }
+  .admin-link { color: var(--ink-soft); font-size: 12px; text-decoration: underline; margin-top: 6px; display: inline-block; }
+
+  @media (max-width: 760px) {
+    .layout { flex-direction: column; }
+    .sidebar { position: static; width: 100%; flex-basis: auto; }
+  }
 </style>
 </head>
 <body>
 <div class="page">
-  <h1>다정한 말 한마디 릴레이 — 관리자 페이지</h1>
+  <div class="hero-wrap">
+    <img class="hero-banner" src="banner.jpg" alt="세계 자살예방의 날 캠페인 - 다정한 말 한마디 릴레이. 오늘 건넨 다정함, 잊지 않고 돌려드릴게요.">
+  </div>
+  <header>
+    <h1 style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">다정한 말 한마디 릴레이</h1>
+    <p class="eyebrow">지금, 당신의 한마디를 이어주세요 🌿</p>
+  </header>
 
-  <div class="login-box" id="loginBox">
-    <label for="loginEmail">관리자 이메일</label>
-    <input type="email" id="loginEmail">
-    <label for="loginPassword">비밀번호</label>
-    <input type="password" id="loginPassword">
-    <button id="loginBtn">로그인</button>
-    <div class="login-error" id="loginError"></div>
+  <div class="conn-error" id="connError"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <form class="composer" id="composerForm">
+        <div class="field">
+          <label for="sidInput">학번</label>
+          <input type="text" id="sidInput" maxlength="20" placeholder="예: 20261234">
+        </div>
+        <div class="field">
+          <label for="realNameInput">이름</label>
+          <input type="text" id="realNameInput" maxlength="20" placeholder="실명">
+        </div>
+        <div class="field">
+          <label for="deptInput">학과</label>
+          <select id="deptInput">
+            <option value="">선택해주세요</option>
+            <option>간호학과</option>
+            <option>치위생과</option>
+            <option>뷰티융합과</option>
+            <option>사회복지과</option>
+            <option>아동심리상담과</option>
+            <option>의료AI융합과</option>
+            <option>글로벌융합과</option>
+            <option>글로벌요양서비스과</option>
+            <option>교직원</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msgInput">응원 메시지</label>
+          <textarea id="msgInput" maxlength="200" placeholder="지금 누군가에게, 또는 스스로에게 건네고 싶은 말을 남겨주세요"></textarea>
+        </div>
+        <p class="privacy-note">학번·이름·학과는 공개되지 않으며, 담당 상담센터 관리자만 확인합니다.</p>
+        <div class="composer-footer">
+          <span class="char-count" id="charCount">0 / 200</span>
+          <button type="submit" class="submit-btn" id="submitBtn">이어서 남기기</button>
+        </div>
+        <div class="error-msg" id="errorMsg"></div>
+      </form>
+    </aside>
+
+    <main class="feed-col">
+      <div class="count-bar" id="countBar">메시지를 불러오는 중...</div>
+      <div class="loading-state" id="loadingState">메시지를 불러오는 중입니다...</div>
+      <div class="feed" id="feed" style="display:none;"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨주세요.</div>
+    </main>
   </div>
 
-  <div id="adminArea" style="display:none;">
-    <div class="top-bar">
-      <span id="whoami"></span>
-      <button id="logoutBtn">로그아웃</button>
-    </div>
-
-    <div class="tabs">
-      <button class="active" data-panel="msgPanel">메시지 관리</button>
-      <button data-panel="participantsPanel">참여자 명단</button>
-    </div>
-
-    <div class="panel active" id="msgPanel">
-      <table id="msgTable">
-        <thead><tr><th>메시지</th><th>신고</th><th>시간</th><th>관리</th></tr></thead>
-        <tbody id="msgBody"></tbody>
-      </table>
-      <div class="empty-note" id="msgEmpty" style="display:none;">메시지가 없습니다.</div>
-    </div>
-
-    <div class="panel" id="participantsPanel">
-      <button class="export-btn" id="exportBtn">엑셀로 다운로드</button>
-      <table>
-        <thead><tr><th>학번</th><th>이름</th><th>학과</th><th>메시지</th><th>시간</th></tr></thead>
-        <tbody id="participantsBody"></tbody>
-      </table>
-      <div class="empty-note" id="pEmpty" style="display:none;">참여자가 없습니다.</div>
-    </div>
-  </div>
+  <footer>
+    <div>이 게시판의 응원 메시지는 모두에게 공개됩니다. 학번·이름·학과는 관리자만 확인해요.</div>
+    <a class="admin-link" href="admin.html" target="_blank" rel="noopener">관리자 페이지 →</a>
+  </footer>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyAacDHT3ifs9WvMURNPrP3o0koHKCD9HMo",
@@ -98,134 +149,127 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth();
 const messagesRef = db.collection('messages');
 const participantsRef = db.collection('participants');
+const REPORT_THRESHOLD = 3;
 
-const loginBox = document.getElementById('loginBox');
-const loginEmail = document.getElementById('loginEmail');
-const loginPassword = document.getElementById('loginPassword');
-const loginBtn = document.getElementById('loginBtn');
-const loginError = document.getElementById('loginError');
-const adminArea = document.getElementById('adminArea');
-const whoami = document.getElementById('whoami');
-const logoutBtn = document.getElementById('logoutBtn');
-const msgBody = document.getElementById('msgBody');
-const msgEmpty = document.getElementById('msgEmpty');
-const participantsBody = document.getElementById('participantsBody');
-const pEmpty = document.getElementById('pEmpty');
-const exportBtn = document.getElementById('exportBtn');
+const form = document.getElementById('composerForm');
+const sidInput = document.getElementById('sidInput');
+const realNameInput = document.getElementById('realNameInput');
+const deptInput = document.getElementById('deptInput');
+const msgInput = document.getElementById('msgInput');
+const charCount = document.getElementById('charCount');
+const submitBtn = document.getElementById('submitBtn');
+const errorMsg = document.getElementById('errorMsg');
+const feed = document.getElementById('feed');
+const emptyState = document.getElementById('emptyState');
+const loadingState = document.getElementById('loadingState');
+const countBar = document.getElementById('countBar');
+const connError = document.getElementById('connError');
 
-let latestParticipants = [];
+msgInput.addEventListener('input', () => { charCount.textContent = msgInput.value.length + ' / 200'; });
 
+function timeAgo(ts) {
+  const diff = Math.floor((Date.now() - ts) / 1000);
+  if (diff < 60) return '방금 전';
+  if (diff < 3600) return Math.floor(diff / 60) + '분 전';
+  if (diff < 86400) return Math.floor(diff / 3600) + '시간 전';
+  return Math.floor(diff / 86400) + '일 전';
+}
 function escapeHtml(str) {
   const div = document.createElement('div');
-  div.textContent = str || '';
+  div.textContent = str;
   return div.innerHTML;
 }
-function fmtTime(ts) {
-  return new Date(ts).toLocaleString('ko-KR');
+
+function render(docs) {
+  loadingState.style.display = 'none';
+  connError.style.display = 'none';
+  const visible = docs.map(d => ({ id: d.id, ...d.data() })).filter(m => !m.hidden);
+
+  if (visible.length === 0) {
+    feed.style.display = 'none';
+    emptyState.style.display = 'block';
+    countBar.innerHTML = '아직 첫 메시지를 기다리고 있어요';
+    return;
+  }
+  emptyState.style.display = 'none';
+  feed.style.display = 'block';
+  countBar.innerHTML = '지금까지 <strong>' + visible.length + '명</strong>이 다정함을 이어가고 있어요';
+
+  feed.innerHTML = visible.map(m => `
+    <div class="msg-card">
+      <p class="msg-text">${escapeHtml(m.text)}</p>
+      <div class="msg-meta"><span>${timeAgo(m.ts)}</span></div>
+      <div class="msg-actions"><button data-id="${m.id}">신고</button></div>
+    </div>`).join('');
 }
 
-document.querySelectorAll('.tabs button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.panel).classList.add('active');
-  });
-});
+messagesRef.orderBy('ts', 'desc').onSnapshot(
+  (snapshot) => {
+    render(snapshot.docs);
+    snapshot.docs.forEach(d => {
+      const data = d.data();
+      if (!data.hidden && (data.reports || 0) >= REPORT_THRESHOLD) {
+        messagesRef.doc(d.id).update({ hidden: true }).catch(() => {});
+      }
+    });
+  },
+  (err) => {
+    loadingState.style.display = 'none';
+    connError.textContent = '메시지 서버에 연결하지 못했어요: ' + err.message;
+    connError.style.display = 'block';
+  }
+);
 
-loginBtn.addEventListener('click', async () => {
-  loginError.style.display = 'none';
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const studentId = sidInput.value.trim();
+  const studentName = realNameInput.value.trim();
+  const department = deptInput.value;
+  const text = msgInput.value.trim();
+
+  if (!studentId || !studentName || !department) {
+    errorMsg.textContent = '학번, 이름, 학과를 모두 입력해주세요.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+  if (!text) {
+    errorMsg.textContent = '메시지를 입력해주세요.';
+    errorMsg.style.display = 'block';
+    return;
+  }
+  errorMsg.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = '남기는 중...';
   try {
-    await auth.signInWithEmailAndPassword(loginEmail.value.trim(), loginPassword.value);
+    const ts = Date.now();
+    const msgRef = messagesRef.doc();
+    const batch = db.batch();
+    batch.set(msgRef, { text, ts, reports: 0, hidden: false });
+    batch.set(participantsRef.doc(msgRef.id), { studentId, studentName, department, text, ts });
+    await batch.commit();
+    sidInput.value = ''; realNameInput.value = ''; deptInput.value = ''; msgInput.value = '';
+    charCount.textContent = '0 / 200';
   } catch (err) {
-    loginError.textContent = '로그인 실패: ' + err.message;
-    loginError.style.display = 'block';
-  }
-});
-logoutBtn.addEventListener('click', () => auth.signOut());
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    loginBox.style.display = 'none';
-    adminArea.style.display = 'block';
-    whoami.textContent = user.email + ' 로 로그인됨';
-    subscribeMessages();
-    subscribeParticipants();
-  } else {
-    loginBox.style.display = 'block';
-    adminArea.style.display = 'none';
+    errorMsg.textContent = '저장에 실패했어요: ' + err.message;
+    errorMsg.style.display = 'block';
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '이어서 남기기';
   }
 });
 
-function subscribeMessages() {
-  messagesRef.orderBy('ts', 'desc').onSnapshot((snap) => {
-    const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (docs.length === 0) { msgEmpty.style.display = 'block'; msgBody.innerHTML = ''; return; }
-    msgEmpty.style.display = 'none';
-    msgBody.innerHTML = docs.map(m => `
-      <tr class="${m.hidden ? 'is-hidden' : ''}">
-        <td>${escapeHtml(m.text)}</td>
-        <td>${m.reports || 0}</td>
-        <td>${fmtTime(m.ts)}</td>
-        <td class="actions-cell">
-          <button data-id="${m.id}" data-action="${m.hidden ? 'unhide' : 'hide'}">${m.hidden ? '숨김해제' : '숨기기'}</button>
-          <button class="delete-btn" data-id="${m.id}" data-action="delete" ${m.hidden ? '' : 'disabled title="먼저 숨긴 뒤 삭제 가능"'}>삭제</button>
-        </td>
-      </tr>`).join('');
-  });
-}
-
-msgBody.addEventListener('click', async (e) => {
-  const btn = e.target.closest('button[data-action]');
-  if (!btn || btn.disabled) return;
-  const id = btn.dataset.id;
-  const action = btn.dataset.action;
+feed.addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-id]');
+  if (!btn) return;
+  btn.disabled = true;
   try {
-    if (action === 'hide') await messagesRef.doc(id).update({ hidden: true });
-    else if (action === 'unhide') await messagesRef.doc(id).update({ hidden: false, reports: 0 });
-    else if (action === 'delete') {
-      if (!confirm('완전히 삭제할까요? 되돌릴 수 없습니다.')) return;
-      await messagesRef.doc(id).delete();
-    }
+    await messagesRef.doc(btn.dataset.id).update({ reports: firebase.firestore.FieldValue.increment(1) });
   } catch (err) {
-    alert('처리 실패: ' + err.message);
+    alert('처리에 실패했어요: ' + err.message);
+    btn.disabled = false;
   }
-});
-
-function subscribeParticipants() {
-  participantsRef.onSnapshot((snap) => {
-    const docs = snap.docs.map(d => d.data()).sort((a, b) => b.ts - a.ts);
-    latestParticipants = docs;
-    if (docs.length === 0) { pEmpty.style.display = 'block'; participantsBody.innerHTML = ''; return; }
-    pEmpty.style.display = 'none';
-    participantsBody.innerHTML = docs.map(p => `
-      <tr>
-        <td>${escapeHtml(p.studentId)}</td>
-        <td>${escapeHtml(p.studentName)}</td>
-        <td>${escapeHtml(p.department)}</td>
-        <td>${escapeHtml(p.text)}</td>
-        <td>${fmtTime(p.ts)}</td>
-      </tr>`).join('');
-  });
-}
-
-exportBtn.addEventListener('click', () => {
-  if (latestParticipants.length === 0) { alert('내보낼 데이터가 없습니다.'); return; }
-  const rows = latestParticipants.map(p => ({
-    '학번': p.studentId,
-    '이름': p.studentName,
-    '학과': p.department,
-    '메시지': p.text,
-    '등록시간': fmtTime(p.ts)
-  }));
-  const ws = XLSX.utils.json_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, '참여자명단');
-  const dateStr = new Date().toISOString().slice(0, 10);
-  XLSX.writeFile(wb, `다정한말한마디_참여자명단_${dateStr}.xlsx`);
 });
 </script>
 </body>
