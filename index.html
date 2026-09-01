@@ -5,27 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>다정한 말 한마디 릴레이</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Serif+KR:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #F3F5EE; --card: #FFFFFF; --ink: #263129; --ink-soft: #5C6960;
-    --teal: #2F6F62; --teal-deep: #1E4B41; --coral: #E8927C; --coral-deep: #B45A42;
-    --line: #DDE3D6; --danger: #B4463C;
+    --bg: #FBF3DE; --card: #FFFDF7; --ink: #33422C; --ink-soft: #7A7A63;
+    --teal: #4C8C5A; --teal-deep: #35643F; --coral: #E8834C; --coral-deep: #C25E2C;
+    --line: #E9DEC1; --danger: #C1473A; --leaf: #8FBF7F;
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
-  .page { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
-  header { text-align: center; margin-bottom: 32px; }
-  .eyebrow { font-size: 13px; color: var(--teal); letter-spacing: 0.02em; margin-bottom: 8px; }
-  h1 { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 26px; margin: 0 0 10px; }
-  .slogan { font-family: 'Noto Serif KR', serif; font-size: 15px; color: var(--coral-deep); margin: 0; }
+  body {
+    margin: 0; color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;
+    background: linear-gradient(180deg, #FFF9EA 0%, #FBF3DE 30%, #F6EAC9 100%);
+  }
+  .page { max-width: 980px; margin: 0 auto; padding: 0 24px 80px; }
+  .hero-wrap { margin: 0 -24px 8px; }
+  .hero-banner { width: 100%; display: block; border-radius: 0 0 28px 28px; }
+  header { text-align: center; margin: 20px 0 28px; }
+  .eyebrow { font-size: 13px; color: var(--teal-deep); letter-spacing: 0.02em; margin-bottom: 6px; font-weight: 500; }
+  h1 { font-family: 'Gaegu', 'Noto Serif KR', serif; font-weight: 700; font-size: 30px; margin: 0 0 8px; color: var(--teal-deep); }
+  .slogan { font-family: 'Gaegu', 'Noto Serif KR', serif; font-size: 17px; color: var(--coral-deep); margin: 0; }
   .conn-error { text-align: center; background: #FDEFE9; border: 0.5px solid var(--danger); color: var(--danger); font-size: 13px; padding: 8px; border-radius: 8px; margin-bottom: 20px; display: none; }
 
   .layout { display: flex; gap: 24px; align-items: flex-start; }
   .sidebar { flex: 0 0 300px; position: sticky; top: 24px; }
   .feed-col { flex: 1; min-width: 0; }
 
-  form.composer { background: var(--card); border-radius: 14px; border: 0.5px solid var(--line); padding: 18px; }
+  form.composer { background: var(--card); border-radius: 20px; border: 0.5px solid var(--line); padding: 18px; box-shadow: 0 6px 18px rgba(160, 130, 60, 0.08); }
   .composer label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; }
   .composer .field { margin-bottom: 12px; }
   .composer input[type="text"], .composer select {
@@ -49,7 +54,7 @@
   .count-bar strong { color: var(--teal-deep); font-weight: 700; }
   .feed { position: relative; padding-left: 24px; }
   .feed::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
-  .msg-card { position: relative; background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+  .msg-card { position: relative; background: var(--card); border: 0.5px solid var(--line); border-radius: 16px; padding: 16px 18px; margin-bottom: 16px; box-shadow: 0 4px 14px rgba(160, 130, 60, 0.06); }
   .msg-card::before { content: ""; position: absolute; left: -24px; top: 20px; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
   .msg-text { font-family: 'Noto Serif KR', serif; font-size: 16px; margin: 0 0 10px; white-space: pre-wrap; word-break: break-word; }
   .msg-meta { font-size: 12px; color: var(--ink-soft); display: flex; justify-content: flex-end; margin-bottom: 8px; }
@@ -68,10 +73,12 @@
 </head>
 <body>
 <div class="page">
+  <div class="hero-wrap">
+    <img class="hero-banner" src="banner.jpg" alt="세계 자살예방의 날 캠페인 - 다정한 말 한마디 릴레이. 오늘 건넨 다정함, 잊지 않고 돌려드릴게요.">
+  </div>
   <header>
-    <div class="eyebrow">세계 자살예방의 날 캠페인</div>
-    <h1>다정한 말 한마디 릴레이</h1>
-    <p class="slogan">오늘 건넨 다정함, 잊지 않고 돌려드릴게요</p>
+    <h1 style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);">다정한 말 한마디 릴레이</h1>
+    <p class="eyebrow">지금, 당신의 한마디를 이어주세요 🌿</p>
   </header>
 
   <div class="conn-error" id="connError"></div>
