@@ -14,40 +14,56 @@
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
-  .page { max-width: 640px; margin: 0 auto; padding: 48px 24px 80px; }
-  header { text-align: center; margin-bottom: 40px; }
+  .page { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  header { text-align: center; margin-bottom: 32px; }
   .eyebrow { font-size: 13px; color: var(--teal); letter-spacing: 0.02em; margin-bottom: 8px; }
-  h1 { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 28px; margin: 0 0 12px; }
-  .slogan { font-family: 'Noto Serif KR', serif; font-size: 16px; color: var(--coral-deep); margin: 0; }
-  .count-bar { text-align: center; font-size: 14px; color: var(--ink-soft); margin: 20px 0 32px; padding: 10px; border-top: 0.5px solid var(--line); border-bottom: 0.5px solid var(--line); }
-  .count-bar strong { color: var(--teal-deep); font-weight: 700; }
-  form.composer { background: var(--card); border-radius: 14px; border: 0.5px solid var(--line); padding: 20px; margin-bottom: 40px; }
-  .composer label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; }
-  .field-row { display: flex; gap: 12px; margin-bottom: 16px; }
-  .field-row > div { flex: 1; }
-  .composer input[type="text"] { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; font-family: inherit; color: var(--ink); }
-  .composer textarea { width: 100%; min-height: 84px; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 15px; font-family: inherit; resize: vertical; color: var(--ink); }
-  .composer input:focus, .composer textarea:focus { outline: none; border-color: var(--teal); }
-  .privacy-note { font-size: 12px; color: var(--ink-soft); margin: -8px 0 16px; }
-  .composer-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
-  .char-count { font-size: 12px; color: var(--ink-soft); }
-  .submit-btn { background: var(--teal); color: #fff; border: none; padding: 10px 22px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; }
+  h1 { font-family: 'Noto Serif KR', serif; font-weight: 600; font-size: 26px; margin: 0 0 10px; }
+  .slogan { font-family: 'Noto Serif KR', serif; font-size: 15px; color: var(--coral-deep); margin: 0; }
+  .conn-error { text-align: center; background: #FDEFE9; border: 0.5px solid var(--danger); color: var(--danger); font-size: 13px; padding: 8px; border-radius: 8px; margin-bottom: 20px; display: none; }
+
+  .layout { display: flex; gap: 24px; align-items: flex-start; }
+  .sidebar { flex: 0 0 300px; position: sticky; top: 24px; }
+  .feed-col { flex: 1; min-width: 0; }
+
+  form.composer { background: var(--card); border-radius: 14px; border: 0.5px solid var(--line); padding: 18px; }
+  .composer label { display: block; font-size: 12px; color: var(--ink-soft); margin-bottom: 4px; }
+  .composer .field { margin-bottom: 12px; }
+  .composer input[type="text"], .composer select {
+    width: 100%; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 13px; font-family: inherit; color: var(--ink); background: #fff;
+  }
+  .composer textarea {
+    width: 100%; min-height: 90px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+    font-size: 14px; font-family: inherit; resize: vertical; color: var(--ink);
+  }
+  .composer input:focus, .composer select:focus, .composer textarea:focus { outline: none; border-color: var(--teal); }
+  .privacy-note { font-size: 11px; color: var(--ink-soft); margin: 6px 0 12px; line-height: 1.4; }
+  .composer-footer { display: flex; flex-direction: column; gap: 8px; }
+  .char-count { font-size: 11px; color: var(--ink-soft); text-align: right; }
+  .submit-btn { background: var(--teal); color: #fff; border: none; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: inherit; cursor: pointer; width: 100%; }
   .submit-btn:hover { background: var(--teal-deep); }
   .submit-btn:disabled { background: #A9B5AC; cursor: not-allowed; }
-  .error-msg { color: var(--coral-deep); font-size: 13px; margin-top: 8px; display: none; }
+  .error-msg { color: var(--coral-deep); font-size: 12px; margin-top: 6px; display: none; }
+
+  .count-bar { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; padding: 10px; border-bottom: 0.5px solid var(--line); }
+  .count-bar strong { color: var(--teal-deep); font-weight: 700; }
   .feed { position: relative; padding-left: 24px; }
   .feed::before { content: ""; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 1px; background: var(--line); }
   .msg-card { position: relative; background: var(--card); border: 0.5px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
   .msg-card::before { content: ""; position: absolute; left: -24px; top: 20px; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
   .msg-text { font-family: 'Noto Serif KR', serif; font-size: 16px; margin: 0 0 10px; white-space: pre-wrap; word-break: break-word; }
-  .msg-meta { font-size: 12px; color: var(--ink-soft); display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .msg-meta { font-size: 12px; color: var(--ink-soft); display: flex; justify-content: flex-end; margin-bottom: 8px; }
   .msg-actions { display: flex; gap: 12px; border-top: 0.5px solid var(--line); padding-top: 8px; margin-top: 4px; }
   .msg-actions button { background: none; border: none; font-size: 12px; color: var(--ink-soft); cursor: pointer; padding: 0; font-family: inherit; }
   .msg-actions button:hover { color: var(--teal-deep); }
   .empty-state, .loading-state { text-align: center; color: var(--ink-soft); font-size: 14px; padding: 40px 0; }
   footer { text-align: center; font-size: 12px; color: var(--ink-soft); margin-top: 40px; }
   .admin-link { color: var(--ink-soft); font-size: 12px; text-decoration: underline; margin-top: 6px; display: inline-block; }
-  .conn-error { text-align: center; background: #FDEFE9; border: 0.5px solid var(--danger); color: var(--danger); font-size: 13px; padding: 8px; border-radius: 8px; margin-bottom: 20px; display: none; }
+
+  @media (max-width: 760px) {
+    .layout { flex-direction: column; }
+    .sidebar { position: static; width: 100%; flex-basis: auto; }
+  }
 </style>
 </head>
 <body>
@@ -59,37 +75,56 @@
   </header>
 
   <div class="conn-error" id="connError"></div>
-  <div class="count-bar" id="countBar">메시지를 불러오는 중...</div>
 
-  <form class="composer" id="composerForm">
-    <div class="field-row">
-      <div>
-        <label for="sidInput">학번</label>
-        <input type="text" id="sidInput" maxlength="20" placeholder="예: 20261234">
-      </div>
-      <div>
-        <label for="realNameInput">이름</label>
-        <input type="text" id="realNameInput" maxlength="20" placeholder="실명">
-      </div>
-    </div>
-    <label for="nameInput">게시판에 표시될 닉네임 (선택, 비워두면 '익명')</label>
-    <input type="text" id="nameInput" maxlength="20" placeholder="예: 익명의 새힘인" style="margin-bottom:16px;">
-    <label for="msgInput">응원 메시지</label>
-    <textarea id="msgInput" maxlength="200" placeholder="지금 누군가에게, 또는 스스로에게 건네고 싶은 말을 남겨주세요"></textarea>
-    <p class="privacy-note">학번과 이름은 공개되지 않으며, 담당 상담센터 관리자만 확인합니다.</p>
-    <div class="composer-footer">
-      <span class="char-count" id="charCount">0 / 200</span>
-      <button type="submit" class="submit-btn" id="submitBtn">이어서 남기기</button>
-    </div>
-    <div class="error-msg" id="errorMsg"></div>
-  </form>
+  <div class="layout">
+    <aside class="sidebar">
+      <form class="composer" id="composerForm">
+        <div class="field">
+          <label for="sidInput">학번</label>
+          <input type="text" id="sidInput" maxlength="20" placeholder="예: 20261234">
+        </div>
+        <div class="field">
+          <label for="realNameInput">이름</label>
+          <input type="text" id="realNameInput" maxlength="20" placeholder="실명">
+        </div>
+        <div class="field">
+          <label for="deptInput">학과</label>
+          <select id="deptInput">
+            <option value="">선택해주세요</option>
+            <option>간호학과</option>
+            <option>치위생과</option>
+            <option>뷰티융합과</option>
+            <option>사회복지과</option>
+            <option>아동심리상담과</option>
+            <option>의료AI융합과</option>
+            <option>글로벌융합과</option>
+            <option>글로벌요양서비스과</option>
+            <option>교직원</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="msgInput">응원 메시지</label>
+          <textarea id="msgInput" maxlength="200" placeholder="지금 누군가에게, 또는 스스로에게 건네고 싶은 말을 남겨주세요"></textarea>
+        </div>
+        <p class="privacy-note">학번·이름·학과는 공개되지 않으며, 담당 상담센터 관리자만 확인합니다.</p>
+        <div class="composer-footer">
+          <span class="char-count" id="charCount">0 / 200</span>
+          <button type="submit" class="submit-btn" id="submitBtn">이어서 남기기</button>
+        </div>
+        <div class="error-msg" id="errorMsg"></div>
+      </form>
+    </aside>
 
-  <div class="loading-state" id="loadingState">메시지를 불러오는 중입니다...</div>
-  <div class="feed" id="feed" style="display:none;"></div>
-  <div class="empty-state" id="emptyState" style="display:none;">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨주세요.</div>
+    <main class="feed-col">
+      <div class="count-bar" id="countBar">메시지를 불러오는 중...</div>
+      <div class="loading-state" id="loadingState">메시지를 불러오는 중입니다...</div>
+      <div class="feed" id="feed" style="display:none;"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">아직 남겨진 메시지가 없어요. 첫 메시지를 남겨주세요.</div>
+    </main>
+  </div>
 
   <footer>
-    <div>이 게시판의 응원 메시지는 모두에게 공개됩니다. 학번과 이름은 관리자만 확인해요.</div>
+    <div>이 게시판의 응원 메시지는 모두에게 공개됩니다. 학번·이름·학과는 관리자만 확인해요.</div>
     <a class="admin-link" href="admin.html" target="_blank" rel="noopener">관리자 페이지 →</a>
   </footer>
 </div>
@@ -114,7 +149,7 @@ const REPORT_THRESHOLD = 3;
 const form = document.getElementById('composerForm');
 const sidInput = document.getElementById('sidInput');
 const realNameInput = document.getElementById('realNameInput');
-const nameInput = document.getElementById('nameInput');
+const deptInput = document.getElementById('deptInput');
 const msgInput = document.getElementById('msgInput');
 const charCount = document.getElementById('charCount');
 const submitBtn = document.getElementById('submitBtn');
@@ -158,7 +193,7 @@ function render(docs) {
   feed.innerHTML = visible.map(m => `
     <div class="msg-card">
       <p class="msg-text">${escapeHtml(m.text)}</p>
-      <div class="msg-meta"><span>${escapeHtml(m.name || '익명')}</span><span>${timeAgo(m.ts)}</span></div>
+      <div class="msg-meta"><span>${timeAgo(m.ts)}</span></div>
       <div class="msg-actions"><button data-id="${m.id}">신고</button></div>
     </div>`).join('');
 }
@@ -184,11 +219,11 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const studentId = sidInput.value.trim();
   const studentName = realNameInput.value.trim();
+  const department = deptInput.value;
   const text = msgInput.value.trim();
-  const displayName = nameInput.value.trim();
 
-  if (!studentId || !studentName) {
-    errorMsg.textContent = '학번과 이름을 입력해주세요.';
+  if (!studentId || !studentName || !department) {
+    errorMsg.textContent = '학번, 이름, 학과를 모두 입력해주세요.';
     errorMsg.style.display = 'block';
     return;
   }
@@ -204,10 +239,10 @@ form.addEventListener('submit', async (e) => {
     const ts = Date.now();
     const msgRef = messagesRef.doc();
     const batch = db.batch();
-    batch.set(msgRef, { text, name: displayName || '익명', ts, reports: 0, hidden: false });
-    batch.set(participantsRef.doc(msgRef.id), { studentId, studentName, text, ts });
+    batch.set(msgRef, { text, ts, reports: 0, hidden: false });
+    batch.set(participantsRef.doc(msgRef.id), { studentId, studentName, department, text, ts });
     await batch.commit();
-    sidInput.value = ''; realNameInput.value = ''; nameInput.value = ''; msgInput.value = '';
+    sidInput.value = ''; realNameInput.value = ''; deptInput.value = ''; msgInput.value = '';
     charCount.textContent = '0 / 200';
   } catch (err) {
     errorMsg.textContent = '저장에 실패했어요: ' + err.message;
